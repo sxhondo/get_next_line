@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
-int main(int argc, char **argv)
+int 		main(int argc, char **argv)
 {
-	int fd;
-	int ret;
-	int line;
-	char *buff;
+	int 	fd;
+	int 	ret;
+	int 	line;
+	char 	*buff;
 
 	line = 0;
-	if (argc == 2) 
+	if (argc == 2)
 	{
 		fd = open(argv[1], O_RDONLY);
 		while ((ret = get_next_line(fd, &buff)) > 0) {
@@ -35,4 +35,3 @@ int main(int argc, char **argv)
        close(fd);
    }
 }
-

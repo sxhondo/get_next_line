@@ -12,24 +12,6 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
-void        *ft_realloc(void *ptr, size_t newsize)
-{
-	char	*str;
-	char	*new;
-
-	if (ptr && newsize == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	str = (char *)ptr;
-	if (!(new = ft_strnew(newsize - 1)))
-		return (NULL);
-	ft_strncpy(new, str, newsize);
-	free (str);
-	return (new);
-}
-
 t_list		*find_struct(t_list **file, int fd)
 {
 	t_list	*tmp;

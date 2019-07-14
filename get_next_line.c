@@ -54,19 +54,14 @@ int 		convert(t_list **file, char **line, int bytes)
 	char	*cont;
 	char	*left;
 
-	i = 0;
-
 	cont = (char *)(*file)->content;
 	left = (ft_strchr(cont, '\n') + 1);
 	if (!bytes) //in case last line
 	{
 		if (ft_strlen(cont) != 0) //in case eof
 		{
-			// printf("%s\n", "ww");
 			*line = ft_strdup(cont);
-			return (0);
 		}
-		// printf("%s\n", "aa");
 		ft_strdel(&cont);
 		return (0);
 	}
@@ -97,7 +92,6 @@ int		get_next_line(const int fd, char **line)
 		if (ft_strchr(file->content, '\n'))
 			break;
 	}
-	// free (file);
 	return (convert(&file, line, bytes));
 }
 

@@ -6,11 +6,29 @@
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/28 18:20:21 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/06/01 18:00:14 by sxhondo          ###   ########.fr       */
+/*   Updated: 2019/07/14 11:03:17 by null             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "get_next_line.h"
+
+void        *ft_realloc(void *ptr, size_t newsize)
+{
+	char	*str;
+	char	*new;
+
+	if (ptr && newsize == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	str = (char *)ptr;
+	if (!(new = ft_strnew(newsize - 1)))
+		return (NULL);
+	ft_strncpy(new, str, newsize);
+	free (str);
+	return (new);
+}
 
 t_list		*find_struct(t_list **file, int fd)
 {
@@ -30,21 +48,34 @@ t_list		*find_struct(t_list **file, int fd)
 	return (tmp);
 }
 
-int 	convert(t_list **file, char **line)
+int 		convert(t_list **file, char **line, int bytes)
 {
 	int 	i;
-	t_list	*tmp;
-	char	*buf;
+	char	*cont;
 	char	*left;
 
 	i = 0;
-	tmp = *file;
-	buf = (char *)tmp->content;
-	while (buf[i] && buf[i] != '\n')
+
+	cont = (char *)(*file)->content;
+	left = (ft_strchr(cont, '\n') + 1);
+	if (!bytes) //in case last line
+	{
+		if (ft_strlen(cont) != 0) //in case eof
+		{
+			// printf("%s\n", "ww");
+			*line = ft_strdup(cont);
+			return (0);
+		}
+		// printf("%s\n", "aa");
+		ft_strdel(&cont);
+		return (0);
+	}
+	i = 0;
+	while (cont[i] && cont[i] != '\n')
 		i++;
-	*line = ft_strndup(buf, i);
-	left = (ft_strchr(buf, '\n') + 1);
-	tmp->content = left;
+	*line = ft_strndup(cont, i);
+	ft_strdel(&cont);
+	(*file)->content = ft_strdup(left);
 	return (1);
 }
 
@@ -62,20 +93,12 @@ int		get_next_line(const int fd, char **line)
 	while ((bytes = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[bytes] = '\0';
-		file->content = ft_strjoin(file->content, buf);
+		file->content = ft_strjoin_free(file->content, buf, 1);
 		if (ft_strchr(file->content, '\n'))
 			break;
 	}
-	if (!bytes)
-		return (0);
-	if (bytes < BUFF_SIZE)
-	{
-		*line = ft_strdup(file->content);
-		return (1);
-	}
-	else
-		return (convert(&file, line));
-	return (0);
+	// free (file);
+	return (convert(&file, line, bytes));
 }
 
 // int		main()

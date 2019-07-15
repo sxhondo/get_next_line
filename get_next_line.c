@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
-t_list		*find_struct(t_list **file, int fd)
+t_list				*find_struct(t_list **file, int fd)
 {
-	t_list	*tmp;
+	t_list			*tmp;
 
 	tmp = *file;
 	while (tmp)
@@ -30,33 +30,27 @@ t_list		*find_struct(t_list **file, int fd)
 	return (tmp);
 }
 
-int 		convert(t_list **file, char **line, int bytes)
+int 				convert(t_list **file, char **line)
 {
-	int 	i;
-	char	*cont;
-	char	*left;
+	int 			i;
+	char			*cont;
+	char			*left;
 
-	cont = (char *)(*file)->content;
-	left = (ft_strchr(cont, '\n') + 1);
-	if (!bytes) //in case last line
-	{
-		if (ft_strlen(cont) != 0) //in case eof
-		{
-			*line = ft_strdup(cont);
-		}
-		ft_strdel(&cont);
-		return (0);
-	}
 	i = 0;
+	cont = (char *)(*file)->content;
+	left = (ft_strchr((*file)->content, '\n') + 1);
 	while (cont[i] && cont[i] != '\n')
 		i++;
 	*line = ft_strndup(cont, i);
+	if (ft_strchr(cont, '\n'))
+		(*file)->content = ft_strdup(left);
+	else
+		(*file)->content_size = -1;
 	ft_strdel(&cont);
-	(*file)->content = ft_strdup(left);
 	return (1);
 }
 
-int		get_next_line(const int fd, char **line)
+int					get_next_line(const int fd, char **line)
 {
 	static t_list	*file;
 	int				bytes;
@@ -66,7 +60,6 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 
 	file = find_struct(&file, fd);
-	// printf("FILE->CONTENT: %s\n", file->content);
 	while ((bytes = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[bytes] = '\0';
@@ -74,19 +67,7 @@ int		get_next_line(const int fd, char **line)
 		if (ft_strchr(file->content, '\n'))
 			break;
 	}
-	return (convert(&file, line, bytes));
+	if (!ft_strlen(file->content))
+		return (0);
+	return (convert(&file, line));
 }
-
-// int		main()
-// {
-// 	char	*line;
-// 	int		fd;
-//
-// 	fd = open("./tests/two.txt", O_RDONLY);
-// 	// fd = open("./tests/eof", O_RDONLY);
-// 	printf("RETURN: %d\n", get_next_line(fd, &line));
-// 	printf("LINE: %s\n", line);
-// 	printf("RETURN: %d\n", get_next_line(fd, &line));
-// 	printf("LINE: %s\n", line);
-// 	return (0);
-// }

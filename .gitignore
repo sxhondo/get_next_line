@@ -1,4 +1,6 @@
 .idea
 cmake-build-debug/
 CMakeLists.txt
+exe.dSYM
+.DS_Store
 gnl

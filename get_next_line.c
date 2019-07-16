@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/28 18:20:21 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/07/14 11:03:17 by null             ###   ########.fr       */
+/*   Created: 2019/07/16 17:58:41 by sxhondo           #+#    #+#             */
+/*   Updated: 2019/07/16 17:58:43 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 #include "get_next_line.h"
 
-t_list				*find_struct(t_list **file, int fd)
+t_list				*search_entry(t_list **file, int fd)
 {
-	t_list			*tmp;
+	t_list		*tmp;
 
 	tmp = *file;
 	while (tmp)
@@ -24,50 +24,65 @@ t_list				*find_struct(t_list **file, int fd)
 				return (tmp);
 		tmp = tmp->next;
 	}
-	tmp = ft_lstnew("", 1);
-	tmp->content_size = (size_t)fd;
-	ft_lstadd(file, tmp);
-	return (tmp);
+	return (NULL);
 }
 
-int 				convert(t_list **file, char **line)
+char				*add_entry(t_list **file, int fd)
 {
-	int 			i;
-	char			*cont;
+	t_list			*tmp;
+
+	if (!(tmp = search_entry(file, fd)))
+	{
+		tmp = ft_lstnew("", 1);
+		tmp->content_size = (size_t)fd;
+		ft_lstadd(file, tmp);
+	}
+	return ((char *)tmp->content);
+}
+
+int					convert(t_list **file, char *tmp, char **line, int fd)
+{
+	int				i;
 	char			*left;
+	t_list			*node;
 
 	i = 0;
-	cont = (char *)(*file)->content;
-	left = (ft_strchr((*file)->content, '\n') + 1);
-	while (cont[i] && cont[i] != '\n')
+	left = (ft_strchr(tmp, '\n'));
+	while (tmp[i] && tmp[i] != '\n')
 		i++;
-	*line = ft_strndup(cont, i);
-	if (ft_strchr(cont, '\n'))
-		(*file)->content = ft_strdup(left);
-	else
-		(*file)->content_size = -1;
-	ft_strdel(&cont);
+	if (!(*line = ft_strndup(tmp, i)))
+		return (0);
+	if (left)
+	{
+		node = search_entry(file, fd);
+		if (!(node->content = ft_strdup(left + 1)))
+			return (0);
+		ft_strdel(&tmp);
+		return (1);
+	}
+	(search_entry(file, fd))->content_size = -1;
+	ft_strdel(&tmp);
 	return (1);
 }
 
 int					get_next_line(const int fd, char **line)
 {
 	static t_list	*file;
+	char			*tmp;
 	int				bytes;
 	char			buf[BUFF_SIZE + 1];
 
 	if (fd < 0 || !line || BUFF_SIZE < 1 || read(fd, buf, 0) < 0)
 		return (-1);
-
-	file = find_struct(&file, fd);
+	tmp = add_entry(&file, fd);
 	while ((bytes = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[bytes] = '\0';
-		file->content = ft_strjoin_free(file->content, buf, 1);
-		if (ft_strchr(file->content, '\n'))
-			break;
+		tmp = ft_strjoin_free(tmp, buf, 1);
+		if (ft_strchr(tmp, '\n'))
+			break ;
 	}
-	if (!ft_strlen(file->content))
+	if (!ft_strlen(tmp))
 		return (0);
-	return (convert(&file, line));
+	return (convert(&file, tmp, line, fd));
 }

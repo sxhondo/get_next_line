@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsplit.c                                      :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 17:24:22 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/07/16 18:15:09 by sxhondo          ###   ########.fr       */
+/*   Created: 2019/07/16 17:59:46 by sxhondo           #+#    #+#             */
+/*   Updated: 2019/07/16 17:59:48 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+void		*ft_realloc(void *ptr, size_t newsize)
 {
-	char	**tab;
-	size_t	i;
-	size_t	t;
-	size_t	j;
+	char	*str;
+	char	*new;
 
-	t = 0;
-	i = 0;
-	if (!s || !(tab = ft_memalloc(sizeof(char *) * (ft_cntwrds(s, c) + 1))))
-		return (NULL);
-	while (s[i])
+	if (ptr && newsize == 0)
 	{
-		while (s[i] == c)
-			i++;
-		j = i;
-		while (s[i] && s[i] != c)
-			i++;
+		free(ptr);
+		return (NULL);
 	}
-	tab[t] = NULL;
-	return (tab);
+	str = (char *)ptr;
+	if (!(new = ft_strnew(newsize)))
+		return (NULL);
+	ft_strncpy(new, str, newsize);
+	free(str);
+	return (new);
 }

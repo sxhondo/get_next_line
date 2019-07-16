@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_flush_words.c                                   :+:      :+:    :+:   */
+/*   ft_lstpushback.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/27 13:07:27 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/04/27 13:08:08 by sxhondo          ###   ########.fr       */
+/*   Created: 2019/07/05 17:30:18 by sxhondo           #+#    #+#             */
+/*   Updated: 2019/07/05 17:30:20 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_flush_words(char **words, size_t i)
+void				ft_lstpushback(t_list **lst, t_list *elem)
 {
-	while (i--)
-		ft_strdel(&(words[i]));
-	free(*words);
+	t_list			*tmp;
+
+	tmp = *lst;
+	if (!*lst)
+		*lst = elem;
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = elem;
+		elem->next = NULL;
+	}
 }

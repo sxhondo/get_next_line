@@ -2,29 +2,6 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int 				main()
-{
-	char	*line1;
-	char	*line2;
-	int 	fd1;
-	int 	fd2;
-
-	fd1 = open("tests/astronomy_domine.txt", O_RDONLY);
-	get_next_line(fd1, &line1);
-	printf("%s\n", line1);
-
-	fd2 = open("tests/a.txt", O_RDONLY);
-	get_next_line(fd2, &line2);
-	printf("%s\n", line2);
-
-	get_next_line(fd1, &line1);
-	printf("%s\n", line1);
-
-	get_next_line(fd2, &line2);
-	printf("%s\n", line2);
-
-}
-/*
 int 		main(int argc, char **argv)
 {
 	int 	fd;
@@ -58,4 +35,3 @@ int 		main(int argc, char **argv)
        close(fd);
    }
 }
-*/

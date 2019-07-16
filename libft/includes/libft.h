@@ -6,7 +6,7 @@
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 22:22:09 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/06/08 18:45:13 by sxhondo          ###   ########.fr       */
+/*   Updated: 2019/07/16 18:15:55 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstnew(void const *content, size_t content_size);
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-void				ft_flush_words(char **words, size_t i);
 void				ft_print_from_tail(const t_list *list);
 char				*ft_strjoin_free(char *s1, char *s2, int w);
+void				ft_lstfree(t_list **lst);
+void				ft_lstpushback(t_list **lst, t_list *elem);
+void				*ft_realloc(void *ptr, size_t newsize);
 
 #endif

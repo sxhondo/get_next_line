@@ -17,8 +17,6 @@ char	*ft_strchr(const char *s, int c)
 	size_t	i;
 
 	i = 0;
-	if (!s)
-		ft_putstr("hey");
 	if (c == 0)
 		return ((char *)s + ft_strlen(s));
 	while (s[i])

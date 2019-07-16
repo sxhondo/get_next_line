@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsplit.c                                      :+:      :+:    :+:   */
+/*   ft_lstfree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 17:24:22 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/07/16 18:15:09 by sxhondo          ###   ########.fr       */
+/*   Created: 2019/07/05 17:31:45 by sxhondo           #+#    #+#             */
+/*   Updated: 2019/07/05 17:44:43 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+void				ft_lstfree(t_list **lst)
 {
-	char	**tab;
-	size_t	i;
-	size_t	t;
-	size_t	j;
+	t_list			*next;
+	t_list			*curr;
 
-	t = 0;
-	i = 0;
-	if (!s || !(tab = ft_memalloc(sizeof(char *) * (ft_cntwrds(s, c) + 1))))
-		return (NULL);
-	while (s[i])
+	curr = *lst;
+	while (curr)
 	{
-		while (s[i] == c)
-			i++;
-		j = i;
-		while (s[i] && s[i] != c)
-			i++;
+		next = curr->next;
+		ft_memdel(&curr->content);
+		free(curr);
+		curr = next;
 	}
-	tab[t] = NULL;
-	return (tab);
+	*lst = NULL;
 }

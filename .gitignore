@@ -4,3 +4,4 @@ CMakeLists.txt
 exe.dSYM
 .DS_Store
 gnl
+a.out.dSYM/

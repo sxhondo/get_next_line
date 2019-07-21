@@ -6,7 +6,7 @@
 /*   By: sxhondo <w13cho@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 17:58:41 by sxhondo           #+#    #+#             */
-/*   Updated: 2019/07/16 17:58:43 by sxhondo          ###   ########.fr       */
+/*   Updated: 2019/07/21 15:50:55 by sxhondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int					convert(t_list **file, char *tmp, char **line, int fd)
 	t_list			*node;
 
 	i = 0;
-	left = (ft_strchr(tmp, '\n'));
+	left = ft_strchr(tmp, '\n');
 	while (tmp[i] && tmp[i] != '\n')
 		i++;
 	if (!(*line = ft_strndup(tmp, i)))
